@@ -45,7 +45,7 @@ const addContact = async (contact) => {
     await fs.writeFile(filePath, JSON.stringify(contacts));
     return newContact;
   } catch (error) {
-    console.log(errore);
+    console.log(error);
   }
 };
 
@@ -61,7 +61,7 @@ const updateContact = async (contactId, updatedContact) => {
     await fs.writeFile(filePath, JSON.stringify(contacts));
     return contacts[index];
   } catch (error) {
-    console.log(errore);
+    console.log(error);
   }
 };
 
