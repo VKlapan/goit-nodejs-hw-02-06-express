@@ -34,7 +34,20 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {};
+const addContact = async (contact) => {
+  const { name, email, phone } = contact;
+  const contacts = await listContacts();
+  const id = Date.now().toString();
+  const newContact = { id, name, email, phone };
+  contacts.push(newContact);
+
+  try {
+    await fs.writeFile(filePath, JSON.stringify(contacts));
+    return newContact;
+  } catch (error) {
+    console.log(errore);
+  }
+};
 
 const updateContact = async (contactId, body) => {};
 
