@@ -1,14 +1,69 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
 
-const listContacts = async () => {}
+const filePath = path.resolve("./models/contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const contactsFile = await fs.readFile(filePath);
+    return JSON.parse(contactsFile);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.filter((contact) => contact.id === contactId);
+  console.log(contact.length);
+  return contact.length === 0 ? null : contact;
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
 
-const updateContact = async (contactId, body) => {}
+  if (index === -1) return null;
+
+  const deletedContact = contacts.splice(index, 1);
+  try {
+    await fs.writeFile(filePath, JSON.stringify(contacts));
+    return deletedContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const addContact = async (contact) => {
+  const { name, email, phone } = contact;
+  const contacts = await listContacts();
+  const id = Date.now().toString();
+  const newContact = { id, name, email, phone };
+  contacts.push(newContact);
+
+  try {
+    await fs.writeFile(filePath, JSON.stringify(contacts));
+    return newContact;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateContact = async (contactId, updatedContact) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+
+  if (index === -1) return null;
+
+  contacts[index] = { ...contacts[index], ...updatedContact };
+
+  try {
+    await fs.writeFile(filePath, JSON.stringify(contacts));
+    return contacts[index];
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +71,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
