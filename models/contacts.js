@@ -4,18 +4,13 @@ const path = require("path");
 const filePath = path.resolve("./models/contacts.json");
 
 const listContacts = async () => {
-  try {
-    const contactsFile = await fs.readFile(filePath);
-    return JSON.parse(contactsFile);
-  } catch (error) {
-    console.log(error);
-  }
+  const contactsFile = await fs.readFile(filePath);
+  return JSON.parse(contactsFile);
 };
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
   const contact = contacts.filter((contact) => contact.id === contactId);
-  console.log(contact.length);
   return contact.length === 0 ? null : contact;
 };
 
@@ -26,12 +21,8 @@ const removeContact = async (contactId) => {
   if (index === -1) return null;
 
   const deletedContact = contacts.splice(index, 1);
-  try {
-    await fs.writeFile(filePath, JSON.stringify(contacts));
-    return deletedContact;
-  } catch (error) {
-    console.log(error);
-  }
+  await fs.writeFile(filePath, JSON.stringify(contacts));
+  return deletedContact;
 };
 
 const addContact = async (contact) => {
@@ -41,12 +32,8 @@ const addContact = async (contact) => {
   const newContact = { id, name, email, phone };
   contacts.push(newContact);
 
-  try {
-    await fs.writeFile(filePath, JSON.stringify(contacts));
-    return newContact;
-  } catch (error) {
-    console.log(error);
-  }
+  await fs.writeFile(filePath, JSON.stringify(contacts));
+  return newContact;
 };
 
 const updateContact = async (contactId, updatedContact) => {
@@ -57,12 +44,8 @@ const updateContact = async (contactId, updatedContact) => {
 
   contacts[index] = { ...contacts[index], ...updatedContact };
 
-  try {
-    await fs.writeFile(filePath, JSON.stringify(contacts));
-    return contacts[index];
-  } catch (error) {
-    console.log(error);
-  }
+  await fs.writeFile(filePath, JSON.stringify(contacts));
+  return contacts[index];
 };
 
 module.exports = {
