@@ -7,20 +7,11 @@ const updateContact = async (req, res, next) => {
   const id = req.params.contactId;
   const updatedContact = req.body;
 
-  if (Object.keys(updatedContact).length === 0)
-    throw helpers.httpError(400, "missing fields");
+  const response = await contacts.updateContact(id, updatedContact);
 
-  const validationResult = validateInput(updatedContact);
+  if (response === null) throw helpers.httpError(404, "Not found");
 
-  if (validationResult.error === undefined) {
-    const response = await contacts.updateContact(id, updatedContact);
-
-    if (response === null) throw helpers.httpError(404, "Not found");
-
-    res.status(200).json({ response });
-  }
-
-  throw helpers.httpError(400, validationResult.error.message);
+  res.status(200).json({ response });
 };
 
 module.exports = updateContact;
