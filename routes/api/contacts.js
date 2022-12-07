@@ -3,33 +3,19 @@ const Joi = require("joi");
 const { removeContact, updateContact } = require("../../models/contacts");
 
 const controllers = require("../../controllers/contacts");
+const controllerlWrapper = require("../../helpers/controllerWrapper");
 
 const express = require("express");
 const router = express.Router();
 
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-  }),
-  phone: Joi.string()
-    .pattern(/^[0-9]+$/)
-    .length(10),
-});
+router.get("/", controllerlWrapper(controllers.getListContacts));
 
-const validateInput = (contact) => {
-  const validationResult = schema.validate(contact);
-  return validationResult;
-};
+router.get("/:contactId", controllerlWrapper(controllers.getContactById));
 
-router.get("/", controllers.getListContacts);
+router.post("/", controllerlWrapper(controllers.addNewContact));
 
-router.get("/:contactId", controllers.getContactById);
+router.delete("/:contactId", controllerlWrapper(controllers.deleteContact));
 
-router.post("/", controllers.addNewContact);
-
-router.delete("/:contactId", controllers.deleteContact);
-
-router.put("/:contactId", controllers.updateContact);
+router.put("/:contactId", controllerlWrapper(controllers.updateContact));
 
 module.exports = router;
