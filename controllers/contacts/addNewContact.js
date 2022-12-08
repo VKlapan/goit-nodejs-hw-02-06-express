@@ -1,6 +1,5 @@
 const contacts = require("../../models/contacts");
-const validateInput = require("../../helpers/validateInput");
-const helpers = require("../../helpers");
+const serviceDB = require("../../services");
 
 const addNewContact = async (req, res, next) => {
   const { name, email, phone } = req.body;

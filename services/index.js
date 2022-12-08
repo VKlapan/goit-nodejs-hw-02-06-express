@@ -1,7 +1,6 @@
 const Contact = require("./schemas/contact");
 
 const getAllcontacts = async () => {
-  console.log("get all");
   return Contact.find();
 };
 
