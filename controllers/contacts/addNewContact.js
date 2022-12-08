@@ -1,10 +1,7 @@
-const contacts = require("../../models/contacts");
 const serviceDB = require("../../services");
 
 const addNewContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-
-  const response = await contacts.addContact({ name, email, phone });
+  const response = await serviceDB.createContact(req.body);
 
   res.status(201).json({ response });
 };

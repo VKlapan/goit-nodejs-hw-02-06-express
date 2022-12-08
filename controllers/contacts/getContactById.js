@@ -1,10 +1,7 @@
-const contacts = require("../../models/contacts");
 const helpers = require("../../helpers");
 const serviceDB = require("../../services");
 
 const getContactById = async (req, res, next) => {
-  //  const response = await contacts.getContactById(req.params.contactId);
-
   console.log(typeof req.params.contactId);
 
   const response = await serviceDB.getContactById(req.params.contactId);
