@@ -1,7 +1,7 @@
-const contacts = require("../../models/contacts");
+const serviceDB = require("../../services");
 
 const getListContacts = async (req, res, next) => {
-  const response = await contacts.listContacts();
+  const response = await serviceDB.getAllcontacts();
   res.status(200).json({ response });
 };
 
