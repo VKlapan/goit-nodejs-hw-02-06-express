@@ -11,6 +11,7 @@ const schema = Joi.object({
     .pattern(/^[0-9]+$/)
     .length(10)
     .required(),
+  favorite: Joi.bool(),
 });
 
 module.exports = schema;

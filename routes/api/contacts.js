@@ -12,10 +12,18 @@ router.get("/", controllerlWrapper(controllers.getListContacts));
 
 router.get("/:contactId", controllerlWrapper(controllers.getContactById));
 
-router.post("/", controllerlWrapper(controllers.addNewContact));
+router.post(
+  "/",
+  middlewares.validateInput(inputSchema),
+  controllerlWrapper(controllers.addNewContact)
+);
 
 router.delete("/:contactId", controllerlWrapper(controllers.deleteContact));
 
-router.put("/:contactId", controllerlWrapper(controllers.updateContact));
+router.put(
+  "/:contactId",
+  middlewares.validateInput(inputSchema),
+  controllerlWrapper(controllers.updateContact)
+);
 
 module.exports = router;
