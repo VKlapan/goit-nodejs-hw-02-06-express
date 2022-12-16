@@ -1,7 +1,7 @@
-const serviceDB = require("../../services");
+const serviceDB = require("../../services/contactsDb");
 const helpers = require("../../helpers");
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const response = await serviceDB.removeContact(req.params.contactId);
 
   if (response === null) throw helpers.httpError(404, "Not found");

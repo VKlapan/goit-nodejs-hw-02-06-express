@@ -1,7 +1,7 @@
-const serviceDB = require("../../services");
+const serviceDB = require("../../services/contactsDb");
 const helpers = require("../../helpers");
 
-const updateFavoriteContact = async (req, res, next) => {
+const updateFavoriteContact = async (req, res) => {
   const id = req.params.contactId;
   const { favorite } = req.body;
 

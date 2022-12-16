@@ -1,6 +1,6 @@
-const serviceDB = require("../../services");
+const serviceDB = require("../../services/contactsDb");
 
-const addNewContact = async (req, res, next) => {
+const addNewContact = async (req, res) => {
   const response = await serviceDB.createContact(req.body);
 
   res.status(201).json({ response });
