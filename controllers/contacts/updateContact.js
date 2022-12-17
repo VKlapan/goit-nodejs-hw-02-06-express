@@ -1,4 +1,4 @@
-const serviceDB = require("../../services/contactsDb");
+const serviceDB = require("../../services/contactsService");
 const helpers = require("../../helpers");
 
 const updateContact = async (req, res) => {
