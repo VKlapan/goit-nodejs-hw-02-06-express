@@ -28,4 +28,14 @@ const schemaUser = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
-module.exports = { schemaContact, schemaFavoriteContact, schemaUser };
+const schemaLoginUser = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+module.exports = {
+  schemaContact,
+  schemaFavoriteContact,
+  schemaUser,
+  schemaLoginUser,
+};

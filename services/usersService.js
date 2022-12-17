@@ -11,8 +11,19 @@ const createUser = async (user) => {
   return await User.create(newUser);
 };
 
-const checkUser = async (email) => {
-  console.log(`Check User with email - ${email}`);
+const checkUser = async ({ email, password }) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new Error("User not found :-(");
+  }
+
+  const isAuthorized = await bcrypt.compare(password, user.password);
+
+  if (!isAuthorized) {
+    throw new Error("Email or password is wrong");
+  }
+
   return "checked";
 };
 

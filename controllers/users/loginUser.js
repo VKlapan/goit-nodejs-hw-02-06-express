@@ -1,9 +1,9 @@
 const serviceDB = require("../../services/usersService");
 
 const loginUser = async (req, res) => {
-  const response = await serviceDB.checkUser(req.body.email);
+  const response = await serviceDB.checkUser(req.body);
 
-  res.status(201).json({ response });
+  res.status(200).json({ response });
 };
 
 module.exports = loginUser;

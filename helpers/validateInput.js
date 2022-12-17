@@ -10,8 +10,8 @@ const schema = Joi.object({
     .length(10),
 });
 
-const validateInput = (contact) => {
-  const validationResult = schema.validate(contact);
+const validateInput = (itemToValidate) => {
+  const validationResult = schema.validate(itemToValidate);
   return validationResult;
 };
 
