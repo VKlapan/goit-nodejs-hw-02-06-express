@@ -25,7 +25,7 @@ const schemaUser = Joi.object({
       minDomainSegments: 2,
     })
     .required(),
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
 module.exports = { schemaContact, schemaFavoriteContact, schemaUser };

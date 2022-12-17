@@ -1,8 +1,14 @@
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 const User = require("./schemas/user");
 
-const createUser = async ({ email, password }) => {
-  console.log(`Create User with email: ${email} and password: ${password}`);
-  return "created";
+const createUser = async (user) => {
+  const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
+
+  const newUser = { ...user, password: encryptedPassword };
+  console.log(`Create User : ${JSON.stringify(newUser)}`);
+  return await User.create(newUser);
 };
 
 const checkUser = async (email) => {
