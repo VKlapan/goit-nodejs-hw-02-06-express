@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 
 const PORT = 3000;
-const uriDb =
-  "mongodb+srv://klapan:2VpZA4uf6aHQVSrP@cluster0.bqrd9iv.mongodb.net/contactbook-db?retryWrites=true&w=majority";
+const uriDb =process.env.MONGODB_URI;
 
 mongoose.set("strictQuery", false);
 
