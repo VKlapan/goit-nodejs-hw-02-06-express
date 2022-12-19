@@ -24,12 +24,12 @@ console.log("created User: ", createdUser);
 
   await User.findByIdAndUpdate(_id, { token: jwt });
 
-  console.log("JWT: ", jwt);
+  // console.log("JWT: ", jwt);
 
-  const { payload, protectedHeader } = await jose.jwtVerify(jwt, secret);
+  // const { payload, protectedHeader } = await jose.jwtVerify(jwt, secret);
 
-  console.log("proteted Header: ", protectedHeader);
-  console.log("payload: ", payload);
+  // console.log("proteted Header: ", protectedHeader);
+  // console.log("payload: ", payload);
 
   return {email, subscription};
 
