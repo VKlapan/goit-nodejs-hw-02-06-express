@@ -8,27 +8,31 @@ const User = require("./schemas/user");
 const createUser = async (user) => {
   const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
 
-  const secret = new TextEncoder().encode(
-    "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2"
-  );
-  const alg = "HS256";
-  const { email } = user;
+  const newUser = { ...user, password: encryptedPassword};
 
-  const jwt = await new jose.SignJWT({ email })
+  const createdUser = await User.create(newUser);
+
+console.log("created User: ", createdUser);
+
+  const secret = new TextEncoder().encode(process.env.SECRET);
+  const alg = "HS256";
+  const { _id, email, subscription } = createdUser;
+
+  const jwt = await new jose.SignJWT({ _id, email })
     .setProtectedHeader({ alg })
     .sign(secret);
 
-  console.log(jwt);
+  await User.findByIdAndUpdate(_id, { token: jwt });
+
+  console.log("JWT: ", jwt);
 
   const { payload, protectedHeader } = await jose.jwtVerify(jwt, secret);
 
-  console.log(protectedHeader);
-  console.log(payload);
+  console.log("proteted Header: ", protectedHeader);
+  console.log("payload: ", payload);
 
-  const newUser = { ...user, password: encryptedPassword, token: jwt };
+  return {email, subscription};
 
-  console.log(`Create User : ${JSON.stringify(newUser)}`);
-  return await User.create(newUser);
 };
 
 const checkUser = async ({ email, password }) => {
