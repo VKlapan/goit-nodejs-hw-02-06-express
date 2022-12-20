@@ -41,10 +41,6 @@ const checkUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
   await User.findByIdAndUpdate(_id, { token: jwt });
 
-  // const { payload, protectedHeader } = await jose.jwtVerify(jwt, secret);
-  // console.log("proteted Header: ", protectedHeader);
-  // console.log("payload: ", payload);
-
   return {jwt, email, subscription}
 
 };
