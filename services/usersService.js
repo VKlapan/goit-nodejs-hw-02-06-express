@@ -17,7 +17,7 @@ const createUser = async (user) => {
 
 };
 
-const checkUser = async ({ email:checkedEmail, password:checkedPassword }) => {
+const loginUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
   const user = await User.findOne({email:checkedEmail});
 
@@ -45,7 +45,16 @@ const checkUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
 };
 
+const checkUser = async (checkedToken, checkedUser) => {
+
+ const user = await User.findById(checkedUser._id);
+
+ return (user && user.token === checkedToken);
+
+}
+
 module.exports = {
   createUser,
+  loginUser,
   checkUser,
 };

@@ -11,12 +11,16 @@ const {
 const express = require("express");
 const router = express.Router();
 
-router.get("/", controllerlWrapper(controllers.getListContacts));
+router.get(
+  "/", 
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.getListContacts));
 
 router.get("/:contactId", controllerlWrapper(controllers.getContactById));
 
 router.post(
   "/",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaContact),
   controllerlWrapper(controllers.addNewContact)
 );
