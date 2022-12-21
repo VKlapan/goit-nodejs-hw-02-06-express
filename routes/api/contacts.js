@@ -16,7 +16,9 @@ router.get(
   middlewares.authMiddleware,
   controllerlWrapper(controllers.getListContacts));
 
-router.get("/:contactId", controllerlWrapper(controllers.getContactById));
+router.get("/:contactId",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.getContactById));
 
 router.post(
   "/",
