@@ -15,16 +15,16 @@ const createContact = async (contact, creator) => {
   return Contact.create({ ...contact, owner });
 };
 
-const updateContact = async (id, fields) => {
-  return Contact.findByIdAndUpdate(id, fields, { new: true });
+const updateContact = async (id, fields, owner) => {
+  return Contact.findOneAndUpdate({$and: [{ _id: id }, {owner}]}, fields, { new: true });
 };
 
-const removeContact = async (id) => {
-  return Contact.findByIdAndRemove(id);
+const removeContact = async (id, owner) => {
+  return Contact.findOneAndRemove({$and: [{ _id: id }, {owner}]});
 };
 
-const updateFavoriteContact = async (id, favorite) => {
-  await Contact.findByIdAndUpdate(id, { favorite });
+const updateFavoriteContact = async (id, favorite, owner) => {
+  await Contact.findOneAndUpdate({$and: [{ _id: id }, {owner}]}, { favorite });
   return getContactById(id);
 };
 

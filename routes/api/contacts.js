@@ -27,16 +27,20 @@ router.post(
   controllerlWrapper(controllers.addNewContact)
 );
 
-router.delete("/:contactId", controllerlWrapper(controllers.deleteContact));
+router.delete("/:contactId",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.deleteContact));
 
 router.patch(
   "/:contactId/favorite",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaFavoriteContact),
   controllerlWrapper(controllers.updateFavoriteContact)
 );
 
 router.put(
   "/:contactId",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaContact),
   controllerlWrapper(controllers.updateContact)
 );
