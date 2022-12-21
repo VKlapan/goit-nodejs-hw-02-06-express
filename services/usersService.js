@@ -35,7 +35,7 @@ const loginUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
   const secret = new TextEncoder().encode(process.env.SECRET);
   const alg = "HS256";
-  const jwt = await new jose.SignJWT({ _id, email })
+  const jwt = await new jose.SignJWT({ _id, email, subscription })
     .setProtectedHeader({ alg })
     .sign(secret);
 
@@ -43,6 +43,23 @@ const loginUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
   return {jwt, email, subscription}
 
+};
+
+const logoutUser = async (email) => {
+
+  const user = await User.findOne({email});
+
+  if (!user) {
+    throw new Error("Not authorized");
+  }
+
+  const response = await User.findOneAndUpdate({_id: user._id}, { token: "" }, { new: true });
+
+  return response;
+
+};
+
+const getUser = async (_id) => {
 };
 
 const checkUser = async (checkedToken, checkedUser) => {
@@ -56,5 +73,6 @@ const checkUser = async (checkedToken, checkedUser) => {
 module.exports = {
   createUser,
   loginUser,
+  logoutUser,
   checkUser,
 };

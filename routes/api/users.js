@@ -23,4 +23,16 @@ router.post(
   controllerlWrapper(controllers.loginUser)
 );
 
+router.get(
+  "/logout",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.logoutUser)
+);
+
+router.get(
+  "/current",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.currentUser)
+);
+
 module.exports = router;
