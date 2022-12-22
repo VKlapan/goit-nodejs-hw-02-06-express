@@ -1,10 +1,11 @@
 const helpers = require("../../helpers");
-const serviceDB = require("../../services");
+const serviceDB = require("../../services/contactsService");
 
-const getContactById = async (req, res, next) => {
-  console.log(typeof req.params.contactId);
+const getContactById = async (req, res) => {
+  const contactId = req.params.contactId;
+  const owner = req.user._id
 
-  const response = await serviceDB.getContactById(req.params.contactId);
+  const response = await serviceDB.getContactById(contactId, owner);
 
   if (response === null) throw helpers.httpError(404, "Not found");
 

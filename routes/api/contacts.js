@@ -11,26 +11,36 @@ const {
 const express = require("express");
 const router = express.Router();
 
-router.get("/", controllerlWrapper(controllers.getListContacts));
+router.get(
+  "/", 
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.getListContacts));
 
-router.get("/:contactId", controllerlWrapper(controllers.getContactById));
+router.get("/:contactId",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.getContactById));
 
 router.post(
   "/",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaContact),
   controllerlWrapper(controllers.addNewContact)
 );
 
-router.delete("/:contactId", controllerlWrapper(controllers.deleteContact));
+router.delete("/:contactId",
+  middlewares.authMiddleware,
+  controllerlWrapper(controllers.deleteContact));
 
 router.patch(
   "/:contactId/favorite",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaFavoriteContact),
   controllerlWrapper(controllers.updateFavoriteContact)
 );
 
 router.put(
   "/:contactId",
+  middlewares.authMiddleware,
   middlewares.validateInput(schemaContact),
   controllerlWrapper(controllers.updateContact)
 );
