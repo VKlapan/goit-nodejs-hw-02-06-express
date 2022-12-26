@@ -1,13 +1,11 @@
 const Contact = require("./schemas/contact");
 
 const getAllcontacts = async (owner) => {
-  console.log(owner);
-
-  return Contact.find({owner});
+  return Contact.find({ owner });
 };
 
 const getContactById = async (id, owner) => {
-  return Contact.findOne({$and: [{ _id: id }, {owner}]});
+  return Contact.findOne({ $and: [{ _id: id }, { owner }] });
 };
 
 const createContact = async (contact, creator) => {
@@ -16,15 +14,20 @@ const createContact = async (contact, creator) => {
 };
 
 const updateContact = async (id, fields, owner) => {
-  return Contact.findOneAndUpdate({$and: [{ _id: id }, {owner}]}, fields, { new: true });
+  return Contact.findOneAndUpdate({ $and: [{ _id: id }, { owner }] }, fields, {
+    new: true,
+  });
 };
 
 const removeContact = async (id, owner) => {
-  return Contact.findOneAndRemove({$and: [{ _id: id }, {owner}]});
+  return Contact.findOneAndRemove({ $and: [{ _id: id }, { owner }] });
 };
 
 const updateFavoriteContact = async (id, favorite, owner) => {
-  await Contact.findOneAndUpdate({$and: [{ _id: id }, {owner}]}, { favorite });
+  await Contact.findOneAndUpdate(
+    { $and: [{ _id: id }, { owner }] },
+    { favorite }
+  );
   return getContactById(id);
 };
 
