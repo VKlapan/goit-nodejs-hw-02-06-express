@@ -65,6 +65,16 @@ const logoutUser = async (email) => {
   return response;
 };
 
+const avatarUpdateUser = async (user) => {
+  const response = await User.findOneAndUpdate(
+    { email: user.email },
+    { avatarUrl: user.avatarUrl },
+    { new: true }
+  );
+
+  return response;
+};
+
 const getUser = async (_id) => {};
 
 const checkUser = async (checkedToken, checkedUser) => {
@@ -78,4 +88,5 @@ module.exports = {
   loginUser,
   logoutUser,
   checkUser,
+  avatarUpdateUser,
 };
