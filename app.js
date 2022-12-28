@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
+const filesRouter = require("./routes/api/files");
 //const {authMiddleware} = require("./middlewares");
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+app.use("/", filesRouter);
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
 
