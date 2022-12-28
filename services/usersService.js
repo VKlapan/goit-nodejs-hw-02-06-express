@@ -4,16 +4,20 @@ const saltRounds = 10;
 const jose = require("jose");
 
 const User = require("./schemas/user");
+var gravatar = require("gravatar");
+const gravatarOptions = { s: "200", r: "pg", d: "retro" };
 
 const createUser = async (user) => {
+  const avatarUrl = gravatar.url(user.email, gravatarOptions);
+
   const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
 
-  const newUser = { ...user, password: encryptedPassword };
+  const newUser = { ...user, avatarUrl, password: encryptedPassword };
 
   const createdUser = await User.create(newUser);
-  const { _id, email, subscription } = createdUser;
+  const { _id, email, subscription, avatarUrl: avatar } = createdUser;
 
-  return { email, subscription };
+  return { email, subscription, avatar };
 };
 
 const loginUser = async ({

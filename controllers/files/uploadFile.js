@@ -1,6 +1,8 @@
 const fs = require("fs/promises");
 const path = require("path");
 
+const helpers = require("../../helpers");
+
 const storeAvatarFileFolder = path.resolve("./public/avatars");
 
 const uploadFile = async (req, res, next) => {
@@ -11,7 +13,7 @@ const uploadFile = async (req, res, next) => {
     await fs.rename(temporaryName, fileName);
   } catch (err) {
     await fs.unlink(temporaryName);
-    return next(err);
+    throw helpers.httpError(404, "File uploading failed");
   }
   res.json({
     description,
