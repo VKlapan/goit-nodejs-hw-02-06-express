@@ -35,4 +35,10 @@ router.get(
   controllerlWrapper(controllers.currentUser)
 );
 
+router.patch(
+  "/avatars",
+  middlewares.authMiddleware,
+  middlewares.upload.single("avatar"),
+  controllerlWrapper(controllers.avatarUpdateUser)
+);
 module.exports = router;

@@ -4,28 +4,33 @@ const saltRounds = 10;
 const jose = require("jose");
 
 const User = require("./schemas/user");
+var gravatar = require("gravatar");
+const gravatarOptions = { s: "200", r: "pg", d: "retro" };
 
 const createUser = async (user) => {
+  const avatarUrl = gravatar.url(user.email, gravatarOptions);
+
   const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
 
-  const newUser = { ...user, password: encryptedPassword};
+  const newUser = { ...user, avatarUrl, password: encryptedPassword };
 
   const createdUser = await User.create(newUser);
-  const { _id, email, subscription } = createdUser;
+  const { _id, email, subscription, avatarUrl: avatar } = createdUser;
 
-  return {email, subscription};
-
+  return { email, subscription, avatar };
 };
 
-const loginUser = async ({ email:checkedEmail, password:checkedPassword }) => {
+const loginUser = async ({
+  email: checkedEmail,
+  password: checkedPassword,
+}) => {
+  const user = await User.findOne({ email: checkedEmail });
 
-  const user = await User.findOne({email:checkedEmail});
-
-  const {_id, email, password, subscription} = user;
-  
   if (!user) {
     throw new Error("User not found :-(");
   }
+
+  const { _id, email, password, subscription } = user;
 
   const isAuthorized = await bcrypt.compare(checkedPassword, password);
 
@@ -41,38 +46,47 @@ const loginUser = async ({ email:checkedEmail, password:checkedPassword }) => {
 
   await User.findByIdAndUpdate(_id, { token: jwt });
 
-  return {jwt, email, subscription}
-
+  return { jwt, email, subscription };
 };
 
 const logoutUser = async (email) => {
-
-  const user = await User.findOne({email});
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw new Error("Not authorized");
   }
 
-  const response = await User.findOneAndUpdate({_id: user._id}, { token: "" }, { new: true });
+  const response = await User.findOneAndUpdate(
+    { _id: user._id },
+    { token: "" },
+    { new: true }
+  );
 
   return response;
-
 };
 
-const getUser = async (_id) => {
+const avatarUpdateUser = async (user) => {
+  const response = await User.findOneAndUpdate(
+    { email: user.email },
+    { avatarUrl: user.avatarUrl },
+    { new: true }
+  );
+
+  return response;
 };
+
+const getUser = async (_id) => {};
 
 const checkUser = async (checkedToken, checkedUser) => {
+  const user = await User.findById(checkedUser._id);
 
- const user = await User.findById(checkedUser._id);
-
- return (user && user.token === checkedToken);
-
-}
+  return user && user.token === checkedToken;
+};
 
 module.exports = {
   createUser,
   loginUser,
   logoutUser,
   checkUser,
+  avatarUpdateUser,
 };
