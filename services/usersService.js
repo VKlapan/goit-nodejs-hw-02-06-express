@@ -2,17 +2,25 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const jose = require("jose");
+const { v4: uuidv4 } = require("uuid");
 
 const User = require("./schemas/user");
 var gravatar = require("gravatar");
+const { response } = require("express");
 const gravatarOptions = { s: "200", r: "pg", d: "retro" };
 
 const createUser = async (user) => {
   const avatarUrl = gravatar.url(user.email, gravatarOptions);
 
   const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
+  const verificationToken = uuidv4();
 
-  const newUser = { ...user, avatarUrl, password: encryptedPassword };
+  const newUser = {
+    ...user,
+    avatarUrl,
+    verificationToken,
+    password: encryptedPassword,
+  };
 
   const createdUser = await User.create(newUser);
   const { _id, email, subscription, avatarUrl: avatar } = createdUser;
@@ -75,6 +83,25 @@ const avatarUpdateUser = async (user) => {
   return response;
 };
 
+const checkVerificationTokenUser = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+
+  if (!user) {
+    return null;
+  }
+
+  console.log(user);
+
+  user.verificationToken = "null";
+  user.verify = true;
+
+  const response = await user.save();
+
+  console.log(response);
+
+  return response;
+};
+
 const getUser = async (_id) => {};
 
 const checkUser = async (checkedToken, checkedUser) => {
@@ -89,4 +116,5 @@ module.exports = {
   logoutUser,
   checkUser,
   avatarUpdateUser,
+  checkVerificationTokenUser,
 };

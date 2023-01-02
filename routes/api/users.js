@@ -35,6 +35,11 @@ router.get(
   controllerlWrapper(controllers.currentUser)
 );
 
+router.get(
+  "/verify/:verificationToken",
+  controllerlWrapper(controllers.verifyUserEmail)
+);
+
 router.patch(
   "/avatars",
   middlewares.authMiddleware,
