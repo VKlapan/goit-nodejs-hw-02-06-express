@@ -84,19 +84,11 @@ const avatarUpdateUser = async (user) => {
 };
 
 const checkVerificationTokenUser = async (verificationToken) => {
-  const user = await User.findOne({ verificationToken });
-
-  if (!user) {
-    return null;
-  }
-
-  console.log(user);
-
-  user.verificationToken = "null";
-  user.verify = true;
-
-  const response = await user.save();
-
+  const response = await User.findOneAndUpdate(
+    { verificationToken },
+    { $set: { verificationToken: null, verify: true } },
+    { new: true }
+  );
   console.log(response);
 
   return response;
