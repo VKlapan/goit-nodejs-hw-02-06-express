@@ -33,9 +33,14 @@ const schemaLoginUser = Joi.object({
   password: Joi.string().required(),
 });
 
+const schemaRequestVerifyUserEmail = Joi.object({
+  email: Joi.string().required(),
+});
+
 module.exports = {
   schemaContact,
   schemaFavoriteContact,
   schemaUser,
   schemaLoginUser,
+  schemaRequestVerifyUserEmail,
 };

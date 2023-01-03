@@ -12,15 +12,13 @@ const config = {
   },
 };
 
-const transporter = nodemailer.createTransport(config);
-const emailOptions = {
-  from: "v.lahodnyi@proformula.ua",
-  to: "v.klapan@proformula.ua",
-  subject: "New mail from NODE.JS server",
-  text: "It is a test. I try to check how nodemailer works...",
+const mailTransporter = nodemailer.createTransport(config);
+
+const sendMailToUser = (emailOptions) => {
+  mailTransporter
+    .sendMail(emailOptions)
+    .then((info) => console.log(info))
+    .catch((err) => console.log(err));
 };
 
-transporter
-  .sendMail(emailOptions)
-  .then((info) => console.log(info))
-  .catch((err) => console.log(err));
+module.exports = sendMailToUser;

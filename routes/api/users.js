@@ -6,6 +6,7 @@ const middlewares = require("../../middlewares");
 const {
   schemaUser,
   schemaLoginUser,
+  schemaRequestVerifyUserEmail,
 } = require("../../schemas/contactsInputFields");
 
 const express = require("express");
@@ -38,6 +39,12 @@ router.get(
 router.get(
   "/verify/:verificationToken",
   controllerlWrapper(controllers.verifyUserEmail)
+);
+
+router.post(
+  "/verify/",
+  middlewares.validateInput(schemaRequestVerifyUserEmail),
+  controllerlWrapper(controllers.requestVerifyUserEmail)
 );
 
 router.patch(
