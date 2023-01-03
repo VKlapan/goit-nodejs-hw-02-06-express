@@ -2,22 +2,31 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const jose = require("jose");
+const { v4: uuidv4 } = require("uuid");
 
+const helpers = require("../helpers");
 const User = require("./schemas/user");
 var gravatar = require("gravatar");
+
 const gravatarOptions = { s: "200", r: "pg", d: "retro" };
 
 const createUser = async (user) => {
   const avatarUrl = gravatar.url(user.email, gravatarOptions);
 
   const encryptedPassword = await bcrypt.hash(user.password, saltRounds);
+  const verificationToken = uuidv4();
 
-  const newUser = { ...user, avatarUrl, password: encryptedPassword };
+  const newUser = {
+    ...user,
+    avatarUrl,
+    verificationToken,
+    password: encryptedPassword,
+  };
 
   const createdUser = await User.create(newUser);
   const { _id, email, subscription, avatarUrl: avatar } = createdUser;
 
-  return { email, subscription, avatar };
+  return { email, subscription, avatar, verificationToken };
 };
 
 const loginUser = async ({
@@ -27,7 +36,11 @@ const loginUser = async ({
   const user = await User.findOne({ email: checkedEmail });
 
   if (!user) {
-    throw new Error("User not found :-(");
+    throw helpers.httpError(404, "Not found");
+  }
+
+  if (!user.verify) {
+    throw helpers.httpError(401, "You have to verify your email");
   }
 
   const { _id, email, password, subscription } = user;
@@ -75,7 +88,21 @@ const avatarUpdateUser = async (user) => {
   return response;
 };
 
-const getUser = async (_id) => {};
+const checkVerificationTokenUser = async (verificationToken) => {
+  const response = await User.findOneAndUpdate(
+    { verificationToken },
+    { $set: { verificationToken: null, verify: true } },
+    { new: true }
+  );
+  console.log(response);
+
+  return response;
+};
+
+const findUser = async (findOption) => {
+  const user = await User.findOne(findOption);
+  return user;
+};
 
 const checkUser = async (checkedToken, checkedUser) => {
   const user = await User.findById(checkedUser._id);
@@ -89,4 +116,6 @@ module.exports = {
   logoutUser,
   checkUser,
   avatarUpdateUser,
+  checkVerificationTokenUser,
+  findUser,
 };
